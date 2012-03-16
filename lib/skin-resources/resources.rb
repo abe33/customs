@@ -1,5 +1,5 @@
-module Skin
-  module ResourcesController
+module SkinResources
+  module Resources
     def self.included base
       base.class_eval do
         respond_to :html, :json

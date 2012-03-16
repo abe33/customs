@@ -1,4 +1,4 @@
-module Skin
+module SkinResources
   module Searchable
     def self.included base
       base.send :extend, ClassMethods

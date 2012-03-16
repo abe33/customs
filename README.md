@@ -1,0 +1,3 @@
+# SkinResources
+
+To use with [Skin](http://github.com/blakink/skin), but not only...

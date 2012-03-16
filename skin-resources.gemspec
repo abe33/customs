@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require File.expand_path('../lib/skin/version', __FILE__)
+require File.expand_path('../lib/skin-resources/version', __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = 'skin-resources'
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Common methods to make that controllers manage resources.
     Built to work well with the Skin gem, but not only...'
 
-  s.files         = `git ls-files`.split("\n")
+  s.files         = %w(README.md MIT-LICENSE) + Dir["lib/**/*"]
   s.require_paths = %w(lib)
 
   s.add_dependency 'rails', '~> 3.2.0'

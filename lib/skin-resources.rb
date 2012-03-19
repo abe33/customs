@@ -1,9 +1,9 @@
 require 'skin-resources/searchable'
 require 'skin-resources/http_statuses'
-require 'skin-resources/resources'
+require 'skin-resources/resources_flow'
 
 module SkinResources
-  class Railtie < Rails::Railtie
+  class Engine < Rails::Engine
 
     initializer 'skin-resources.configure' do
       ActiveSupport.on_load(:active_record) do
@@ -12,7 +12,7 @@ module SkinResources
 
       ActiveSupport.on_load(:action_controller) do
         ActionController::Base.send :include, SkinResources::HTTPStatuses
-        ActionController::Base.send :include, SkinResources::Resources
+        ActionController::Base.send :include, SkinResources::ResourcesFlow
       end
     end
   end

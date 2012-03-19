@@ -1,40 +1,48 @@
+require 'cancan'
+
 module SkinResources
-  module Resources
+
+  # Overclass some cancan methods
+
+  class ControllerResource < CanCan::ControllerResource
+    def self.add_before_filter(controller_class, method, *args)
+      controller_class.resource_name = args.first
+      controller_class.send :include, ResourcesFlow::InstanceMethods
+      super
+    end
+
+    def load_collection
+      collection = super
+      collection = paginate collection # if paginate?
+      collection = search   collection # if search?
+      collection
+    end
+
+    def paginate collection
+      collection = collection.page(page) if collection.respond_to?(:page)
+      collection
+    end
+
+    def page
+      [@params[:page].to_i, 1].max
+    end
+
+    def search collection
+      collection = collection.search(@params[:q]) if collection.respond_to?(:search) && @params[:q]
+      collection
+    end
+  end
+
+  module ResourcesFlow
     def self.included base
       base.class_eval do
         respond_to :html, :json
-        
+
         class_attribute :resource_name, instance_reader: false
         # helper_method :resource_name, :resource_class, :collection, :resource
       end
 
       base.send :extend, ClassMethods
-      base.send :include, InstanceMethods
-    end
-
-    class ControllerResource < CanCan::ControllerResource
-      def load_collection
-        collection = super
-        
-        collection = paginate  collection # if paginate?
-        collection = search    collection # if search?
-
-        collection
-      end
-
-      def paginate collection
-        collection = collection.page(page) if collection.respond_to?(:page)
-        collection
-      end
-
-      def page
-        [@params[:page].to_i, 1].max
-      end
-
-      def search collection
-        collection = collection.search(@params[:q]) if collection.respond_to?(:search) && @params[:q]
-        collection
-      end
     end
 
     module ClassMethods
@@ -44,11 +52,6 @@ module SkinResources
         else
           ControllerResource
         end
-      end
-
-      def load_resource *args
-        self.resource_name = args.first
-        super
       end
     end
 
@@ -68,7 +71,7 @@ module SkinResources
 
       def destroy
         destroy_resource
-        respond_with resource, location: resource_name.to_s.pluralize
+        respond_with resource, location: resource_name.to_s.pluralize.to_sym
       end
 
       protected

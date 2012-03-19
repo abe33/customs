@@ -18,5 +18,5 @@ Gem::Specification.new do |s|
   s.require_paths = %w(lib)
 
   s.add_dependency 'rails', '~> 3.2.0'
-  s.add_dependency 'coffee-rails','>= 3.2.1'
+  s.add_dependency 'cancan', '~> 1.6.7'
 end

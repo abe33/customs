@@ -6,23 +6,24 @@ module SkinResources
         rescue_from ActiveRecord::RecordNotFound, with: :not_found
         rescue_from ActiveRecord::RecordInvalid,  with: :unprocessable
         rescue_from CanCan::AccessDenied,         with: :access_denied
-
-        { unauthorized:   401,
-          forbidden:      403,
-          not_found:      404,
-          not_acceptable: 406
-        }.each do |method, code|
-          define_method method do
-            render status_code_template(code)
-          end
-        end
       end
     end
 
     def status_code_template code
       { template: "skin-resources/#{code}", status: code }
     end
- 
+
+    { unauthorized:     401,
+      forbidden:        403,
+      not_found:        404,
+      not_acceptable:   406,
+      unprocessable:    422
+    }.each do |method, code|
+      define_method method do
+        render status_code_template(code)
+      end
+    end
+
     def access_denied
       user_signed_in? ? forbidden : unauthorized
     end

@@ -1,5 +1,8 @@
 en:
   skin_resources:
+    "403":
+      title:    You cannot access to this page .
+      content:  You have not enought rights to access this page.
     "404":
       title:    The page you were looking for doesn't exist.
       content:  You may have mistyped the address or the page may have moved.

@@ -7,14 +7,13 @@ module Traffic
   class ControllerResource < CanCan::ControllerResource
     def self.add_before_filter(controller_class, method, *args)
       controller_class.resource_name = args.first
-      controller_class.send :include, ResourcesFlow::InstanceMethods
+      controller_class.send :include, ResourceFlow::InstanceMethods
       super
     end
 
     def load_collection
       collection = super
       collection = paginate collection # if paginate?
-      collection = search   collection # if search?
       collection
     end
 

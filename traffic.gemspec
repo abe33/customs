@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = 'savater.sebastien@gmail.com'
   s.homepage    = 'http://github.com/blakink/traffic'
 
-  s.summary     = 'Add some magic in your controller, control your resources.'
+  s.summary     = 'Add some magic in your rails controllers.'
 
   s.files         = %w(README.md MIT-LICENSE) + Dir["lib/**/*"]
   s.require_paths = %w(lib)

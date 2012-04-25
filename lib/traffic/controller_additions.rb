@@ -1,6 +1,10 @@
 module Traffic
   module ControllerAdditions
 
+    def control_and_rescue_traffic
+      control_traffic && rescue_traffic   
+    end
+
     def control_traffic
       include Traffic::ResourceFlow
     end

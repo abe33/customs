@@ -1,5 +1,5 @@
 en:
-  skin_resources:
+  traffic:
     "403":
       title:    You cannot access to this page .
       content:  You have not enought rights to access this page.

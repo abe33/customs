@@ -1,6 +1,6 @@
 require 'cancan'
 
-module SkinResources
+module Traffic
 
   # Overclass some cancan methods
 
@@ -26,14 +26,9 @@ module SkinResources
     def page
       [@params[:page].to_i, 1].max
     end
-
-    def search collection
-      collection = collection.search(@params[:q]) if collection.respond_to?(:search) && @params[:q]
-      collection
-    end
   end
 
-  module ResourcesFlow
+  module ResourceFlow
     def self.included base
       base.class_eval do
         respond_to :html, :json

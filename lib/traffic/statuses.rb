@@ -17,7 +17,7 @@ module Traffic
     end
 
     def access_denied
-      user_signed_in? ? forbidden : unauthorized
+      try(:current_user) ? forbidden : unauthorized
     end
 
     def unprocessable *args
@@ -37,8 +37,12 @@ module Traffic
       end
     end
 
+    def status_code_options code
+      { template: status_code_template(code), status: code }
+    end
+
     def status_code_template code
-      { template: "traffic/#{code}", status: code }
+      "traffic/#{code}"
     end
   end
 end

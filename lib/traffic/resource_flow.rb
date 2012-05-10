@@ -5,10 +5,10 @@ module Traffic
   # Overclass some cancan methods
 
   class ControllerResource < CanCan::ControllerResource
-    def self.add_before_filter(controller_class, method, *args)
-      controller_class.resource_name = args.first
-      controller_class.send :include, ResourceFlow::InstanceMethods
+    def initialize *args
       super
+      @controller.class.resource_name   = instance_name
+      @controller.class.resource_class  = resource_class
     end
 
     def load_collection
@@ -28,17 +28,6 @@ module Traffic
   end
 
   module ResourceFlow
-    def self.included base
-      base.class_eval do
-        respond_to :html, :json
-
-        class_attribute :resource_name, instance_reader: false
-        # helper_method :resource_name, :resource_class, :collection, :resource
-      end
-
-      base.send :extend, ClassMethods
-    end
-
     module ClassMethods
       def cancan_resource_class
         if ancestors.map(&:to_s).include? "InheritedResources::Actions"
@@ -49,61 +38,66 @@ module Traffic
       end
     end
 
-    module InstanceMethods
+    def self.included base
+      base.send :extend, ClassMethods
 
-      # Default actions
+      base.respond_to :html, :json
+      base.class_attribute :resource_name, instance_reader: false
+      base.class_attribute :resource_class, instance_reader: false
+    end
 
-      def create
-        save_resource!
-        respond_with resource, location: resource
-      end
+    # Default actions
 
-      def update
-        save_resource!
-        respond_with resource, location: resource
-      end
+    def create
+      save_resource!
+      respond_with resource, location: resource
+    end
 
-      def destroy
-        destroy_resource
-        respond_with resource, location: resource_name.to_s.pluralize.to_sym
-      end
+    def update
+      save_resource!
+      respond_with resource, location: resource
+    end
 
-      protected
+    def destroy
+      destroy_resource
+      respond_with resource, location: resource_name.to_s.pluralize.to_sym
+    end
 
-      # Resource naming
+    protected
 
-      def resource_name
-        self.class.resource_name || resource_name_from_controller
-      end
+    # Resource naming
 
-      def resource_name_from_controller
-        params[:controller].sub("Controller", "").underscore.split('/').last.singularize
-      end
+    def resource_name
+      self.class.resource_name || resource_name_from_controller
+    end
 
-      def resource_class
-        resource_name.to_s.classify.constantize
-      end
+    def resource_name_from_controller
+      params[:controller].sub("Controller", "").underscore.split('/').last.singularize
+    end
 
-      # Resources
+    def resource_class
+      self.class.resource_class || resource_name.to_s.classify.constantize
+    end
 
-      def collection
-        instance_variable_get("@#{resource_name.to_s.pluralize}") || []
-      end
+    # Resources
 
-      def resource
-        instance_variable_get "@#{resource_name.to_s}"
-      end
+    def resource_collection
+      instance_variable_get("@#{resource_name.to_s.pluralize}") || []
+    end
 
-      # Resource actions
+    def resource
+      instance_variable_get "@#{resource_name.to_s}"
+    end
 
-      def save_resource!
-        resource.assign_attributes params[resource_name]
-        resource.save!
-      end
+    # Resource actions
 
-      def destroy_resource
-        resource.destroy
-      end
+    def save_resource!
+      resource.assign_attributes params[resource_name]
+      resource.save!
+    end
+
+    def destroy_resource
+      resource.destroy
     end
   end
 end

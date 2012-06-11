@@ -36,6 +36,13 @@ module Traffic
           ControllerResource
         end
       end
+
+      def before_save *names, &blk
+        _insert_callbacks(names, blk) do |name, options|
+          options[:if] = (Array.wrap(options[:if]) << "!halted")
+          set_callback :save, :before, name, options
+        end   
+      end
     end
 
     def self.included base
@@ -44,6 +51,8 @@ module Traffic
       base.respond_to :html, :json
       base.class_attribute :resource_name, instance_reader: false
       base.class_attribute :resource_class, instance_reader: false
+
+      base.define_callbacks :save
     end
 
     # Default actions
@@ -93,11 +102,15 @@ module Traffic
 
     def save_resource!
       resource.assign_attributes params[resource_name]
-      resource.save!
+      run_callbacks :save do
+        resource.save!
+      end
     end
 
     def destroy_resource
-      resource.destroy
+      run_callbacks :destroy do
+        resource.destroy
+      end
     end
   end
 end

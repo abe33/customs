@@ -52,7 +52,7 @@ module Traffic
       base.class_attribute :resource_name, instance_reader: false
       base.class_attribute :resource_class, instance_reader: false
 
-      base.define_callbacks :save
+      base.define_callbacks :save, :destroy
     end
 
     # Default actions

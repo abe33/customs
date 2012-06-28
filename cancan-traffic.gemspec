@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.summary       = 'Extend cancan and add some magic in your rails controllers.'
   s.homepage      = 'http://github.com/blakink/cancan-traffic'
 
-  s.files         = %w(README.md MIT-LICENSE) + Dir["lib/**/*"]
+  s.files         = Dir.glob('{app,config,lib}/**/*') + %w(Gemfile LICENSE README.md Rakefile)
   s.require_paths = ["lib"]
 
   s.required_ruby_version = '>= 1.9.2'

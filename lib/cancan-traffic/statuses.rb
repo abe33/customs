@@ -1,4 +1,4 @@
-module Traffic
+module CanCanTraffic
   module Statuses
    def self.included base
       base.class_attribute :navigational_formats

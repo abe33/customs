@@ -1,13 +1,25 @@
-# Traffic
+# cancan-traffic
+
+**can-traffic** is an extension to [cancan](http://github.com/ryanb/cancan/) and is based on a principle similar to [inherited_resources](http://github.com/josevalim/inherited_resources).
+
+It adds some magic in your rails controllers, when you're using the cancan methods ```load_and_authorize_resource``` & friends
+
+## Basic Usage
+
+Three methods available :
+
+* ``control_traffic``
+* ``rescue_traffic``
+* ``control_and_rescue_traffic``
+
+
+#### Example
 
 ```
-class ApplicationController < ActionController::Base
-  protect_from_forgery
+class UfoController < ApplicationController
   control_and_rescue_traffic
-end
+  respond_to :html, :json
 
-class ProjectsController < ActionController::Base
-  # Use your favorite cancan methods :
-  load_and_authorize_resource :project
+  load_and_authorize_resource :ufo
 end
 ```

@@ -1,4 +1,4 @@
-module Traffic
+module CanCanTraffic
   module ControllerAdditions
 
     def control_and_rescue_traffic

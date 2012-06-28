@@ -1,6 +1,6 @@
 require 'cancan'
 
-module Traffic
+module CanCanTraffic
 
   # Overclass some cancan methods
 
@@ -48,7 +48,7 @@ module Traffic
     def self.included base
       base.send :extend, ClassMethods
 
-      base.respond_to :html, :json
+      # base.respond_to :html, :json
       base.class_attribute :resource_name, instance_reader: false
       base.class_attribute :resource_class, instance_reader: false
 

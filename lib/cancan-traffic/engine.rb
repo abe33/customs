@@ -1,4 +1,4 @@
-module Traffic
+module CanCanTraffic
   class Engine < Rails::Engine
 
     initializer 'traffic.configure' do

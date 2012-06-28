@@ -6,11 +6,11 @@ module CanCanTraffic
     end
 
     def control_traffic
-      include Traffic::ResourceFlow
+      include CanCanTraffic::ResourceFlow
     end
 
     def rescue_traffic
-      include Traffic::Statuses
+      include CanCanTraffic::Statuses
 
       rescue_from ActiveRecord::RecordNotFound, with: :not_found
       rescue_from ActiveRecord::RecordInvalid,  with: :unprocessable

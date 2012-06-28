@@ -3,7 +3,7 @@ module CanCanTraffic
 
     initializer 'traffic.configure' do
       ActiveSupport.on_load(:action_controller) do
-        ActionController::Base.send :extend, Traffic::ControllerAdditions
+        ActionController::Base.send :extend, CanCanTraffic::ControllerAdditions
       end
     end
   end

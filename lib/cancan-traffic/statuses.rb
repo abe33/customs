@@ -42,7 +42,7 @@ module CanCanTraffic
     end
 
     def status_code_template code
-      "traffic/#{code}"
+      "cancan-traffic/#{code}"
     end
   end
 end

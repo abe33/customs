@@ -100,8 +100,8 @@ module CanCanTraffic
 
     # Resource actions
 
-    def save_resource!
-      resource.assign_attributes params[resource_name]
+    def save_resource! options={}
+      resource.assign_attributes params[resource_name], options
       run_callbacks :save do
         resource.save!
       end

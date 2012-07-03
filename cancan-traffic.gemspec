@@ -7,6 +7,7 @@ Gem::Specification.new do |s|
   s.authors       = 'Savater Sebastien'
   s.email         = 'savater.sebastien@gmail.com'
 
+  s.description   = 'Extend cancan and add some magic in your rails controllers.'
   s.summary       = 'Extend cancan and add some magic in your rails controllers.'
   s.homepage      = 'http://github.com/blakink/cancan-traffic'
 

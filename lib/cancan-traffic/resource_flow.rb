@@ -9,6 +9,8 @@ module CanCanTraffic
       super
       @controller.class.resource_name   = instance_name
       @controller.class.resource_class  = resource_class
+
+      @options[:assign_as] ||= @controller.class.traffic_control_options[:as]
     end
 
     def load_collection
@@ -41,7 +43,7 @@ module CanCanTraffic
         _insert_callbacks(names, blk) do |name, options|
           options[:if] = (Array.wrap(options[:if]) << "!halted")
           set_callback :save, :before, name, options
-        end   
+        end
       end
     end
 
@@ -100,7 +102,9 @@ module CanCanTraffic
 
     # Resource actions
 
-    def save_resource! options={}
+    def save_resource! options=nil
+      options ||= self.class.traffic_control_options.dup.extract!(:as)
+
       resource.assign_attributes params[resource_name], options
       run_callbacks :save do
         resource.save!

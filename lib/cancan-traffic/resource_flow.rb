@@ -9,14 +9,17 @@ module CanCanTraffic
       super
       @controller.resource_name   = instance_name
       @controller.resource_class  = resource_class
-
-      @options[:assign_as] ||= @controller.class.traffic_control_options[:as]
     end
 
     def load_collection
       collection = super
       collection = paginate collection # if paginate?
       collection
+    end
+
+    def build_resource
+      resource = resource_base.new
+      assign_attributes(resource)
     end
 
     def paginate collection
@@ -106,7 +109,7 @@ module CanCanTraffic
     # Resource actions
 
     def save_resource! options=nil
-      options ||= self.class.traffic_control_options.dup.extract!(:as)
+      options ||= self.class.traffic_control_options.slice(:as)
 
       resource.assign_attributes params[resource_name], options
       run_callbacks :save do

@@ -7,8 +7,8 @@ module CanCanTraffic
   class ControllerResource < CanCan::ControllerResource
     def initialize *args
       super
-      @controller.class.resource_name   = instance_name
-      @controller.class.resource_class  = resource_class
+      @controller.resource_name   = instance_name
+      @controller.resource_class  = resource_class
 
       @options[:assign_as] ||= @controller.class.traffic_control_options[:as]
     end
@@ -35,7 +35,7 @@ module CanCanTraffic
         if ancestors.map(&:to_s).include? "InheritedResources::Actions"
           super
         else
-          ControllerResource
+          self.controller_resource_class
         end
       end
 
@@ -49,6 +49,9 @@ module CanCanTraffic
 
     def self.included base
       base.send :extend, ClassMethods
+
+      base.class_attribute :controller_resource_class, instance_reader: false
+      base.controller_resource_class = ControllerResource
 
       # base.respond_to :html, :json
       base.class_attribute :resource_name, instance_reader: false
@@ -79,7 +82,7 @@ module CanCanTraffic
     # Resource naming
 
     def resource_name
-      self.class.resource_name || resource_name_from_controller
+      @resource_name ||= resource_name_from_controller
     end
 
     def resource_name_from_controller
@@ -87,7 +90,7 @@ module CanCanTraffic
     end
 
     def resource_class
-      self.class.resource_class || resource_name.to_s.classify.constantize
+      @resource_class ||= resource_name.to_s.classify.constantize
     end
 
     # Resources

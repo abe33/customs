@@ -12,7 +12,8 @@ module CanCanTraffic
       unprocessable:    422
     }.each do |method, code|
       define_method method do
-        render status_code_template(code)
+        render status_code_template(code), status: code
+        false
       end
     end
 

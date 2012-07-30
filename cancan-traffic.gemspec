@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name          = 'cancan-traffic'
-  s.version       = "0.0.5"
+  s.version       = '0.0.6'
 
   s.authors       = 'Savater Sebastien'
   s.email         = 'savater.sebastien@gmail.com'
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage      = 'http://github.com/blakink/cancan-traffic'
 
   s.files         = Dir.glob('{app,config,lib}/**/*') + %w(Gemfile LICENSE README.md Rakefile)
-  s.require_paths = ["lib"]
+  s.require_paths = %w(lib)
 
   s.required_ruby_version = '>= 1.9.2'
 

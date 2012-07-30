@@ -48,6 +48,13 @@ module CanCanTraffic
           set_callback :save, :before, name, options
         end
       end
+
+      def after_save *names, &blk
+        _insert_callbacks(names, blk) do |name, options|
+          options[:if] = (Array.wrap(options[:if]) << "!halted")
+          set_callback :save, :after, name, options
+        end
+      end
     end
 
     def self.included base
@@ -67,17 +74,17 @@ module CanCanTraffic
 
     def create
       save_resource!
-      respond_with resource, location: resource
+      respond_with resource, location: response_location(:create)
     end
 
     def update
       save_resource!
-      respond_with resource, location: resource
+      respond_with resource, location: response_location(:update)
     end
 
     def destroy
       destroy_resource
-      respond_with resource, location: resource_name.to_s.pluralize.to_sym
+      respond_with resource, location: response_location(:destroy)
     end
 
     protected
@@ -120,6 +127,16 @@ module CanCanTraffic
     def destroy_resource
       run_callbacks :destroy do
         resource.destroy
+      end
+    end
+
+    # Resource paths
+
+    def response_location action
+      case action
+      when :create  then resource
+      when :update  then resource
+      when :destroy then resource_name.to_s.pluralize.to_sym
       end
     end
   end

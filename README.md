@@ -4,6 +4,12 @@
 
 It adds some magic in your rails controllers, when you're using the cancan methods ```load_and_authorize_resource``` & friends
 
+CancanTraffic provide you :
+
+* default cruds methods
+* methods for HTTP statuses
+* common errors rescue
+
 
 ## Requirements:
 
@@ -11,7 +17,7 @@ It adds some magic in your rails controllers, when you're using the cancan metho
 * Rails >= 3.2.0
 * Cancan >= 1.6.7
 
-Feel free to fork & test with other configuration.
+I always try to work on the edge, feel free to fork & test with other configuration.
 
 ## Installation
 
@@ -47,6 +53,30 @@ class UfoController < ApplicationController
   load_and_authorize_resource :ufo
 end
 ```
+
+
+#### Control traffic
+
+`control_traffic` provides you default methods to list, create, update & delete resources, depending on the cancan `load_resource` arguments.
+
+It uses exception to control the flow of data, such as:
+
+  * ActiveRecord::RecordNotFound
+  * ActiveRecord::RecordInvalid
+
+
+It also provides pagination on index, if you use Kaminari or WillPaginate
+
+
+#### Rescue traffic
+
+`rescue_traffic` provides methods for specific HTTP statuses & routes the flow exceptions to the most appropriate one.
+
+  * 401 - unauthorized
+  * 403 - forbidden
+  * 404 - not_found
+  * 422 - unprocessable
+
 
 ## Contributing
 

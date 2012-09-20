@@ -12,7 +12,12 @@ module CanCanTraffic
       unprocessable:    422
     }.each do |method, code|
       define_method method do
-        render status_code_template(code), status: code
+        case template = status_code_template(code)
+        when String then args = [template, { status: code }]
+        when Hash   then args = [template.merge(status: code)]
+        end
+
+        render *args
         false
       end
     end
@@ -36,10 +41,6 @@ module CanCanTraffic
 
         format.all { render status: 422 }
       end
-    end
-
-    def status_code_options code
-      { template: status_code_template(code), status: code }
     end
 
     def status_code_template code

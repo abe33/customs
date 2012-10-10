@@ -19,17 +19,17 @@ module CanCanTraffic
 
       def self.log_before method
         Proc.new do |exception|
-          logger.tagged("CancanTraffic") { logger.info "Rescuing from #{ exception.class } with :#{ method }" }
+          # logger.tagged("CancanTraffic") { logger.info "Rescuing from #{ exception.class } with :#{ method }" }
           send method
         end
       end
 
-      rescue_from ActiveRecord::RecordNotFound, with: log_before(:not_found)
-      rescue_from ActiveRecord::RecordInvalid,  with: log_before(:unprocessable)
-      rescue_from CanCan::AccessDenied,         with: log_before(:access_denied)
+      rescue_from ActiveRecord::RecordNotFound, :with => log_before(:not_found)
+      rescue_from ActiveRecord::RecordInvalid,  :with => log_before(:unprocessable)
+      rescue_from CanCan::AccessDenied,         :with => log_before(:access_denied)
 
       unless Rails.application.config.consider_all_requests_local
-        rescue_from ActionView::MissingTemplate, with: log_before(:not_found)
+        rescue_from ActionView::MissingTemplate, :with => log_before(:not_found)
       end
     end
 

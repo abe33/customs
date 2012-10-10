@@ -13,22 +13,12 @@ module CanCanTraffic
 
     def load_collection
       collection = super
-      collection = paginate collection # if paginate?
       collection
     end
 
     def build_resource
       resource = resource_base.new
       assign_attributes(resource)
-    end
-
-    def paginate collection
-      collection = collection.page(page) if collection.respond_to?(:page)
-      collection
-    end
-
-    def page
-      [@params[:page].to_i, 1].max
     end
   end
 
@@ -60,12 +50,12 @@ module CanCanTraffic
     def self.included base
       base.send :extend, ClassMethods
 
-      base.class_attribute :controller_resource_class, instance_reader: false
+      base.class_attribute :controller_resource_class, :instance_reader => false
       base.controller_resource_class = ControllerResource
 
       # base.respond_to :html, :json
-      base.class_attribute :resource_name, instance_reader: false
-      base.class_attribute :resource_class, instance_reader: false
+      base.class_attribute :resource_name,  :instance_reader => false
+      base.class_attribute :resource_class, :instance_reader => false
 
       base.define_callbacks :save, :destroy
     end
@@ -74,17 +64,17 @@ module CanCanTraffic
 
     def create
       save_resource!
-      respond_with resource, location: response_location(:create)
+      respond_with resource, :location => response_location(:create)
     end
 
     def update
       save_resource!
-      respond_with resource, location: response_location(:update)
+      respond_with resource, :location => response_location(:update)
     end
 
     def destroy
       destroy_resource
-      respond_with resource, location: response_location(:destroy)
+      respond_with resource, :location => response_location(:destroy)
     end
 
     protected

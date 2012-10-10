@@ -5,25 +5,21 @@ module CanCanTraffic
       base.navigational_formats = [:html]
     end
 
-    { unauthorized:     401,
-      forbidden:        403,
-      not_found:        404,
-      not_acceptable:   406,
-      unprocessable:    422
+    { :unauthorized   => 401,
+      :forbidden      => 403,
+      :not_found      => 404,
+      :not_acceptable => 406,
+      :unprocessable  => 422
     }.each do |method, code|
       define_method method do
-        case template = status_code_template(code)
-        when String then args = [template, { status: code }]
-        when Hash   then args = [template.merge(status: code)]
-        end
-
-        render *args
+        render options_for_status_code(code)
         false
       end
     end
 
     def access_denied
-      try(:current_user) ? forbidden : unauthorized
+      return unauthorized if self.respond_to?(:current_user) && !current_user
+      forbidden
     end
 
     def unprocessable *args
@@ -31,19 +27,25 @@ module CanCanTraffic
 
       respond_to do |format|
         format.any *navigational_formats do
-          act = options.delete(:action) || case params[:action]
+          action = options.delete(:action)
+          action ||= case params[:action]
             when 'update' then 'edit'
             when 'create' then 'new'
-            else raise exception
+            else raise "Unknown unprocessable action"
           end
-          render action: act, status: 422
+
+          render :status => 422, :action => action
         end
 
-        format.all { render status: 422 }
+        format.all { render :status => 422 }
       end
     end
 
-    def status_code_template code
+    def options_for_status_code code
+      { :status => code, :template => template_for_status_code(code) }
+    end
+
+    def template_for_status_code code
       "cancan-traffic/#{code}"
     end
   end

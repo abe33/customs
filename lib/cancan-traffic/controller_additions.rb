@@ -20,16 +20,23 @@ module CanCanTraffic
       def self.log_before method
         Proc.new do |exception|
           if respond_to?(:logger) && logger
-            logger.info "[CancanTraffic] Rescuing from #{ exception.class } with :#{ method }" }
+            logger.info "[CancanTraffic] Rescuing from #{ exception.class } with :#{ method }"
           end
 
           send method
         end
       end
 
-      rescue_from ActiveRecord::RecordNotFound, :with => log_before(:not_found)
-      rescue_from ActiveRecord::RecordInvalid,  :with => log_before(:unprocessable)
-      rescue_from CanCan::AccessDenied,         :with => log_before(:access_denied)
+      if defined? ActiveRecord
+        rescue_from ActiveRecord::RecordNotFound, :with => log_before(:not_found)
+        rescue_from ActiveRecord::RecordInvalid,  :with => log_before(:unprocessable)
+      end
+
+      if defined? Mongoid
+        rescue_from Mongoid::Errors::DocumentNotFound, :with => log_before(:not_found)
+      end
+
+      rescue_from CanCan::AccessDenied, :with => log_before(:access_denied)
 
       unless Rails.application.config.consider_all_requests_local
         rescue_from ActionView::MissingTemplate, :with => log_before(:not_found)

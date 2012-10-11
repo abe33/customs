@@ -19,7 +19,10 @@ module CanCanTraffic
 
       def self.log_before method
         Proc.new do |exception|
-          # logger.tagged("CancanTraffic") { logger.info "Rescuing from #{ exception.class } with :#{ method }" }
+          if respond_to?(:logger) && logger
+            logger.info "[CancanTraffic] Rescuing from #{ exception.class } with :#{ method }" }
+          end
+
           send method
         end
       end

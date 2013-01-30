@@ -109,13 +109,13 @@ module CanCanTraffic
       options ||= self.class.traffic_control_options.slice(:as)
 
       resource.assign_attributes params[resource_name], options
-      run_callbacks :save do
+      run_callbacks :save, action_name do
         resource.save!
       end
     end
 
     def destroy_resource
-      run_callbacks :destroy do
+      run_callbacks :destroy, action_name do
         resource.destroy
       end
     end

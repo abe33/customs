@@ -11,11 +11,6 @@ module CanCanTraffic
       @controller.resource_class  = resource_class
     end
 
-    def load_collection
-      collection = super
-      collection
-    end
-
     def build_resource
       resource = resource_base.new
       assign_attributes(resource)
@@ -93,6 +88,10 @@ module CanCanTraffic
       @resource_class ||= resource_name.to_s.classify.constantize
     end
 
+    def resource_params
+      params[resource_name]
+    end
+
     # Resources
 
     def resource_collection
@@ -108,7 +107,7 @@ module CanCanTraffic
     def save_resource! options=nil
       options ||= self.class.traffic_control_options.slice(:as)
 
-      resource.assign_attributes params[resource_name], options
+      resource.assign_attributes resource_params, options
       run_callbacks :save, action_name do
         resource.save!
       end

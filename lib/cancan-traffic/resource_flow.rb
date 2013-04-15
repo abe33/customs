@@ -59,17 +59,17 @@ module CanCanTraffic
 
     def create
       save_resource!
-      respond_with resource, :location => response_location(:create)
+      success_response
     end
 
     def update
       save_resource!
-      respond_with resource, :location => response_location(:update)
+      success_response
     end
 
     def destroy
       destroy_resource
-      respond_with resource, :location => response_location(:destroy)
+      success_response
     end
 
     protected
@@ -119,7 +119,11 @@ module CanCanTraffic
       end
     end
 
-    # Resource paths
+    # Response
+
+    def success_response
+      respond_with resource, :location => response_location(action_name)
+    end
 
     def response_location action
       case action

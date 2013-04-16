@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name          = 'cancan-traffic'
-  s.version       = '0.0.13'
+  s.version       = '0.1.0'
 
   s.authors       = 'Savater Sebastien'
   s.email         = 'savater.sebastien@gmail.com'

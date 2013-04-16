@@ -122,14 +122,14 @@ module CanCanTraffic
     # Response
 
     def success_response
-      respond_with resource, :location => response_location(action_name)
+      respond_with resource, :location => resource_location
     end
 
-    def response_location action
-      case action
-      when :create  then resource
-      when :update  then resource
-      when :destroy then resource_name.to_s.pluralize.to_sym
+    def resource_location
+      case action_name
+      when 'create'  then resource
+      when 'update'  then resource
+      when 'destroy' then resource_name.to_s.pluralize.to_sym
       end
     end
   end

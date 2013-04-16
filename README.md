@@ -4,12 +4,20 @@
 
 It adds some magic in your rails controllers, when you're using the cancan methods ```load_and_authorize_resource``` & friends
 
-CancanTraffic provide you :
+CancanTraffic provides you :
 
 * default cruds methods
 * methods for HTTP statuses
 * common errors rescue
 
+```
+class UfoController < ApplicationController
+  control_and_rescue_traffic
+  respond_to :html, :json
+
+  load_and_authorize_resource :ufo
+end
+```
 
 ## Requirements:
 
@@ -61,21 +69,38 @@ end
 
 It uses exception to control the flow of data, such as:
 
-  * ActiveRecord::RecordNotFound
-  * ActiveRecord::RecordInvalid
-
-
-It also provides pagination on index, if you use Kaminari or WillPaginate
+  * ActiveRecord::RecordNotFound or Mongoid::Errors::DocumentNotFound
+  * ActiveRecord::RecordInvalid or Mongoid::Errors::Validations
+  * CanCan::AccessDenied
 
 
 #### Rescue traffic
 
 `rescue_traffic` provides methods for specific HTTP statuses & routes the flow exceptions to the most appropriate one.
 
-  * 401 - unauthorized
-  * 403 - forbidden
-  * 404 - not_found
-  * 422 - unprocessable
+  * 401 - `unauthorized`
+  * 403 - `forbidden`
+  * 404 - `not_found`
+  * 422 - `unprocessable`
+
+
+#### Callbacks
+
+Callbacks are working like rails filters :
+
+  * `before_save    :make_something`
+  * `before_save    :make_something_else, only: :create`
+  * `before_destroy :make_nothing`
+
+#### Flow customization
+
+You can customize your flow by overwriting few methods in your controller :
+
+  * `resource_params` - that's parameters attributes, using to create/update
+  * `success_response` - what happened after successfull action
+  * `resource_location` - where redirect on a success response (depending on the `action_name`)
+  
+ 
 
 
 ## Contributing

@@ -15,7 +15,7 @@ It adds some magic in your rails controllers, through the cancan magic formula :
 
 ```
 class DrogsController < ApplicationController
-  control_and_rescue
+  control_and_rescue_traffic
   respond_to :html, :json
 
   load_and_authorize_resource :drog
@@ -55,14 +55,14 @@ Two methods available :
 
 Or only one to bring them all and in the darkness bind them :
 
-* ``control_and_rescue``
+* ``control_and_rescue_traffic``
 
 
 #### Example
 
 ```
 class DrogsController < ApplicationController
-  control_and_rescue
+  control_and_rescue_traffic
   respond_to :html, :json
 
   load_and_authorize_resource :drog

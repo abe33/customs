@@ -1,5 +1,8 @@
 en:
-  cancan_traffic:
+  customs:
+    "401":
+      title:    You first need to login.
+      content:  You have not enought rights to access this page.
     "403":
       title:    You cannot access to this page .
       content:  You have not enought rights to access this page.

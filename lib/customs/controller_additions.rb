@@ -1,4 +1,4 @@
-module CanCanTraffic
+module Customs
   module ControllerAdditions
 
     def control_and_rescue_traffic(*args)
@@ -11,16 +11,16 @@ module CanCanTraffic
       self.class_attribute :traffic_control_options
       self.traffic_control_options = options || {}
 
-      include CanCanTraffic::ResourceFlow
+      include Customs::ResourceFlow
     end
 
     def rescue_traffic(*args)
-      include CanCanTraffic::Statuses
+      include Customs::Statuses
 
       def self.log_before method
         Proc.new do |exception|
           if respond_to?(:logger) && logger
-            logger.info "[CancanTraffic] Rescuing from #{ exception.class } with :#{ method }"
+            logger.info "[Customs] Rescuing from #{ exception.class } with :#{ method }"
           end
 
           send method

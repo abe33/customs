@@ -1,8 +1,8 @@
 require 'cancan'
 
-module CanCanTraffic
+module Customs
 
-  # Overclass some cancan methods
+  # Overclass cancan magic formula
 
   class ControllerResource < CanCan::ControllerResource
     def initialize *args

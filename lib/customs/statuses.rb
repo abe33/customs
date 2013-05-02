@@ -1,4 +1,4 @@
-module CanCanTraffic
+module Customs
   module Statuses
    def self.included base
       base.class_attribute :navigational_formats
@@ -46,7 +46,7 @@ module CanCanTraffic
     end
 
     def template_for_status_code code
-      "cancan-traffic/#{code}"
+      "customs/#{code}"
     end
   end
 end

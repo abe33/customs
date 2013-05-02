@@ -1,3 +1,4 @@
+<img src="http://upload.wikimedia.org/wikipedia/commons/3/36/Aiga_customs_inv.gif" alt="Customs Icon" align="right" width="120" />
 
 # Customs
 
@@ -116,3 +117,9 @@ You can customize your flow by overwriting any step in your own controllers :
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+#### Credits
+
+- The gem has been cutted over [cancan](https://github.com/ryanb/cancan).
+- The icon has been stolen to [wikimedia.org](http://wikimedia.org).

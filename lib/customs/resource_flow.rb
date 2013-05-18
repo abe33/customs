@@ -104,10 +104,9 @@ module Customs
 
     # Resource actions
 
-    def save_resource! options=nil
-      options ||= self.class.traffic_control_options.slice(:as)
+    def save_resource!
+      resource.assign_attributes resource_params
 
-      resource.assign_attributes resource_params, options
       run_callbacks :save, action_name do
         resource.save!
       end

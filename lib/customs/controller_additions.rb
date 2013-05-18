@@ -1,20 +1,15 @@
 module Customs
   module ControllerAdditions
 
-    def control_and_rescue_traffic(*args)
-      control_traffic(*args) && rescue_traffic(*args)
+    def control_and_rescue_traffic
+      control_traffic && rescue_traffic
     end
 
-    def control_traffic(*args)
-      options = args.extract_options!
-
-      self.class_attribute :traffic_control_options
-      self.traffic_control_options = options || {}
-
+    def control_traffic
       include Customs::ResourceFlow
     end
 
-    def rescue_traffic(*args)
+    def rescue_traffic
       include Customs::Statuses
 
       def self.log_before method

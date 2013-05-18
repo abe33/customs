@@ -23,6 +23,10 @@ end
 ```
 
 
+In the given examples, we do not endorse in any way the traffic of illegal products.
+Customs is watching you!
+
+
 ## Requirements:
 
 Tested under these conditions :
@@ -99,6 +103,19 @@ Callbacks are working like rails filters :
   * `before_save    :make_something_else, only: :create`
   * `before_destroy :make_nothing`
 
+```
+class BaggagesController < ApplicationController
+  load_and_authorize_resource :baggage
+  before_save :add_illegal_content
+  
+protected
+
+  def add_illegal_content
+    @baggage.illegal_content << Drogs.favorites
+  end
+end
+```
+
 
 #### Flow customization
 
@@ -108,6 +125,21 @@ You can customize your flow by overwriting any step in your own controllers :
   * `success_response` - what happened after successfull action
   * `resource_location` - where redirect on a success response (depending on the `action_name`)
 
+##### Mass assignment
+
+I highly recommend overriding the `resource_params` method with [Strong Parameters](http://github.com/rails/strong_parameters):
+
+```
+class SmugglersController < ApplicationController
+  load_and_authorize_resource :smuggler
+  
+protected
+
+  def resource_params
+    params.require(:smuggler).permit(:name, :skills)
+  end
+end
+```
  
 
 ## Contributing

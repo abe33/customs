@@ -107,13 +107,19 @@ module Customs
     def save_resource!
       resource.assign_attributes resource_params
 
-      run_callbacks :save, action_name do
+      args = [:save]
+      args << action_name unless ::Rails.version.to_f >= 4.0
+
+      run_callbacks *args do
         resource.save!
       end
     end
 
     def destroy_resource
-      run_callbacks :destroy, action_name do
+      args = [:destroy]
+      args << action_name unless ::Rails.version.to_f >= 4.0
+
+      run_callbacks *args do
         resource.destroy
       end
     end
